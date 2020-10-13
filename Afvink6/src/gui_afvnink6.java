@@ -12,10 +12,11 @@ public class gui_afvnink6 {
     private JButton analyseer;
     private JTextArea textArea1;
     private JPanel panel;
-    static final String[] ONE = {"A", "R", "N", "D", "C", "Q", "E", "G", "H", "I", "L", "K"
-            , "M", "F", "P", "S", "T", "W", "Y", "V"};
-    static int voldoen = 0;
-    static int fout = 0;
+    static final String[] ONE = { "R", "N", "D", "C", "Q", "E", "G", "H", "K","S", "T","Y",
+            "A","F","I","L","M","P","W","V"};
+    static int polair = 0;
+    static int apolair = 0;
+    static int goed = 0;
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("gui_afvnink6");
@@ -44,38 +45,49 @@ public class gui_afvnink6 {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String line;
+                int t = 0;
+
                 try {
                     BufferedReader inFile = new BufferedReader(new FileReader(textField1.getText()));
                     while ((line = inFile.readLine()) != null) {
                         for (int i = 0; i < line.length(); i++) {
-                            for (String s : ONE) {
-                                if (line[i] == s) {
-                                    voldoen += 1;
+                            t ++;
+                            char a = line.charAt(i);
+                            System.out.println(a);
+                            for (int x = 0; x< ONE.length;x++) {
+                                char s = ONE[x].charAt(0);
+                                if (a == s ) {
+                                    goed ++;
+                                    if (x>11){
+                                        polair ++;
                                 } else {
-                                    fout += 1;
+                                        apolair ++;
+                                    }
                                 }
                             }
                         }
                     }
+                    System.out.println(polair);
                     inFile.close();
 
                 } catch (IOException fileNotFoundException) {
                     fileNotFoundException.printStackTrace();
                 }
+
+                if (goed != t) {
+                    System.out.println(goed);
+                    textArea1.setText("zit een fout aminozuur in bestand");
+                }
+                else{
+                    textArea1.setText("alle aminozuren zijn juist \n" +
+                            "Het totaal aantal aminozuren is: " + (polair+apolair) + "\n" +
+                            (polair*100/(polair+apolair)) + "% van de aminozuren is polair en " +
+                            (apolair*100/(polair+apolair)) + "% is apolair");
+                }
             }
-            
+
         });
 
     }
-}
 
-class NotAnAA extends Exception {
-
-    public NotAnAA() {
-        super();
-    }
-
-    public NotAnAA(String err) {
-        super(err);
-    }
 }
